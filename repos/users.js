@@ -1,4 +1,3 @@
-const { json } = require('express');
 const fs = require('fs');
 const crypto = require('crypto');
 
@@ -44,14 +43,31 @@ class UsersRepository{
             if(found) return record;
         }
     }
+    async find(filters){
+        const records = await this.findAll();
+        if(Object.keys(filters).length === 0) return records;
+        
+        const result = [];
+        for (const record of records) {
+            let found = true;
+            for (const key in filters) {
+                if(record[key] !== filters[key]){
+                    found = false;
+                    break;
+                }        
+            }
+            if(found) result.push(record);
+        }
+        return result;
+    }
     
-    async delete(id){
+    async deleteById(id){
         const records = await this.findAll();
         const updated = records.filter(data => data.id !== id);
         await this.writeAll(updated);
     }
 
-    async update(id, update){
+    async updateById(id, update){
         const records = await this.findAll();
         const record = records.find(data => data.id === id); 
         if(!record){
@@ -72,10 +88,10 @@ class UsersRepository{
 async function test(){
     const userRepo = new UsersRepository('users.json');
     //await userRepo.insert({email:'test@email.com', password:'password'});
-    //const users = await userRepo.findAll();
-    //await userRepo.update('e21ff5b7', {password: 'new-password'});
-    const user = await userRepo.findOne({id: 'e21ff5b7', email: 'test@email.com', password: 'new-password'});
-    console.log(user);
+    const users = await userRepo.findAll();
+    //await userRepo.updateById('e21ff5b7', {password: 'new-password'});
+    //const user = await userRepo.find({email: 'test@email.com'});
+    console.log(users);
 }
 
 test();
