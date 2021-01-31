@@ -20,11 +20,20 @@ class UsersRepository{
             await fs.promises.readFile(this.filename)
         );
     }
+    async getById(id){
+        const records = await this.getAll();
+        return records.find(data => data.id === id);
+    }
     async insert(data) {
         const records = await this.getAll();
         records.push({id: this.randomId(), ...data});
         await this.writeAll(records);
         
+    }
+    async deleteById(id){
+        const records = await this.getAll();
+        const updated = records.filter(data => data.id !== id);
+        await this.writeAll(updated);
     }
     async writeAll(records) {
         await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2));
@@ -36,9 +45,10 @@ class UsersRepository{
 
 async function test(){
     const userRepo = new UsersRepository('users.json');
-    await userRepo.insert({email:'test@email.com', password:'password'});
-    const users = await userRepo.getAll();
-    console.log(users);
+    //await userRepo.insert({email:'test@email.com', password:'password'});
+    //const users = await userRepo.getAll();
+    const user = await userRepo.deleteById('98ba24f0');
+    //console.log(user);
 }
 
 test();
