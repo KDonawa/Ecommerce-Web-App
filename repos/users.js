@@ -14,6 +14,12 @@ class UsersRepository{
             fs.writeFileSync(this.filename, '[]');
         }
     }
+    async insert(data) {
+        const records = await this.findAll();
+        records.push({id: this.randomId(), ...data});
+        await this.writeAll(records);
+        
+    }
 
     async findAll() {
         return JSON.parse(
@@ -24,17 +30,27 @@ class UsersRepository{
         const records = await this.findAll();
         return records.find(data => data.id === id);
     }
-    async insert(data) {
+    async findOne(filters){
         const records = await this.findAll();
-        records.push({id: this.randomId(), ...data});
-        await this.writeAll(records);
         
+        for (const record of records) {
+            let found = true;
+            for (const key in filters) {
+                if(record[key] !== filters[key]){
+                    found = false;
+                    break;
+                }        
+            }
+            if(found) return record;
+        }
     }
+    
     async delete(id){
         const records = await this.findAll();
         const updated = records.filter(data => data.id !== id);
         await this.writeAll(updated);
     }
+
     async update(id, update){
         const records = await this.findAll();
         const record = records.find(data => data.id === id); 
@@ -44,6 +60,7 @@ class UsersRepository{
         Object.assign(record, update);
         await this.writeAll(records);
     }
+
     async writeAll(records) {
         await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2));
     }
@@ -56,8 +73,9 @@ async function test(){
     const userRepo = new UsersRepository('users.json');
     //await userRepo.insert({email:'test@email.com', password:'password'});
     //const users = await userRepo.findAll();
-    await userRepo.update('e21ff5b7', {password: 'new-password'});
-    //console.log(user);
+    //await userRepo.update('e21ff5b7', {password: 'new-password'});
+    const user = await userRepo.findOne({id: 'e21ff5b7', email: 'test@email.com', password: 'new-password'});
+    console.log(user);
 }
 
 test();
