@@ -42,6 +42,7 @@ class UsersRepository{
             }
             if(found) return record;
         }
+        return null;
     }
     async find(filters){
         const records = await this.findAll();
@@ -85,13 +86,4 @@ class UsersRepository{
     }
 }
 
-async function test(){
-    const userRepo = new UsersRepository('users.json');
-    //await userRepo.insert({email:'test@email.com', password:'password'});
-    const users = await userRepo.findAll();
-    //await userRepo.updateById('e21ff5b7', {password: 'new-password'});
-    //const user = await userRepo.find({email: 'test@email.com'});
-    console.log(users);
-}
-
-test();
+module.exports = new UsersRepository('users.json')
