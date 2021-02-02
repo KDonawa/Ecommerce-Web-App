@@ -6,7 +6,7 @@ const app = express();
 app.use(express.urlencoded({extended: true}));
 app.use(cookieSession({keys: ['fj3fzn74jdtebx93ydb2']}));
 
-app.get('/', (req, res) => {
+app.get('/signup', (req, res) => {
     res.send(`
         <div>
             <form method="POST">
@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     `);
 });
 
-app.post('/', async (req, res) => {
+app.post('/signup', async (req, res) => {
     const {email, password, passwordConfirmation} = req.body;
 
     // Validation
@@ -38,8 +38,39 @@ app.post('/', async (req, res) => {
     req.session.userId = userId;
 
     res.send('Account Created');
-})
+});
 
+app.get('/signout', (req, res) => {
+    req.session = null; // forget current session
+    res.send('You are logged out');
+});
+
+app.get('/signin', (req, res) => {
+    res.send(`
+        <div>
+            <form method="POST">
+                <input name="email" placeholder="email">
+                <input name="password" placeholder="password">
+                <button>Sign In</button>
+            </form>
+        </div>
+    `);
+});
+
+app.post('/signin', async (req, res) => {
+    const {email, password} = req.body;
+
+    const user = await usersRepo.findOne({email});
+    if(!user) {
+        return res.send('Email is not registered');
+    }
+    if(user.password !== password) {
+        return res.send('Invalid password');
+    }
+
+    req.session.userId = user.id;
+    res.send('Signed in');
+})
 
 app.listen(3000, () => {
     console.log('listening');
