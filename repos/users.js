@@ -15,9 +15,10 @@ class UsersRepository{
     }
     async insert(data) {
         const records = await this.findAll();
-        records.push({id: this.randomId(), ...data});
+        const id = this.randomId();
+        records.push({id, ...data});
         await this.writeAll(records);
-        
+        return id;
     }
 
     async findAll() {
