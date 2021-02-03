@@ -1,33 +1,35 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator');
 const usersRepo = require('../../repos/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
+const { validateEmail, validatePassword, validatePasswordConfirmation } = require('./validators');
 
 const router = express.Router();
 
 router.get('/signup', (req, res) => {
-    res.send(signupTemplate({req}));
+    res.send(signupTemplate({ req }));
 });
 
-router.post('/signup', async (req, res) => {
-    const {email, password, passwordConfirmation} = req.body;
+router.post('/signup', [
+        validateEmail,
+        validatePassword,
+        validatePasswordConfirmation,
+    ],
+    async (req, res) => {
+        const result = validationResult(req);
+        
+        if (!result.isEmpty()) {
+            return res.send(signupTemplate({req, errors: result.errors}));
+        }
 
-    // Validation
-    const existingUser = await usersRepo.findOne({email: email});
-    if(existingUser){
-        return res.send('Email is already registerd');
-    }
+        const { email, password } = req.body;
+        //const userId = await usersRepo.insert({ email, password });
 
-    if(password !== passwordConfirmation){
-        return res.send('Passwords do not match');
-    }
+        //req.session.userId = userId;
 
-    const userId = await usersRepo.insert({email, password});
-
-    req.session.userId = userId;
-
-    res.send('Account Created');
-});
+        res.send('Account Created');
+    });
 
 router.get('/signout', (req, res) => {
     req.session = null; // forget current session
@@ -39,14 +41,14 @@ router.get('/signin', (req, res) => {
 });
 
 router.post('/signin', async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
-    const user = await usersRepo.findOne({email});
-    if(!user) {
+    const user = await usersRepo.findOne({ email });
+    if (!user) {
         return res.send('Email is not registered');
     }
     const isValidPassword = await usersRepo.comparePasswords(user.password, password);
-    if(!isValidPassword) {
+    if (!isValidPassword) {
         return res.send('Invalid password');
     }
 
