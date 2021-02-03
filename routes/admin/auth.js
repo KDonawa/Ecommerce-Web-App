@@ -24,9 +24,8 @@ router.post('/signup', [
         }
 
         const { email, password } = req.body;
-        //const userId = await usersRepo.insert({ email, password });
-
-        //req.session.userId = userId;
+        const userId = await usersRepo.insert({ email, password });
+        req.session.userId = userId;
 
         res.send('Account Created');
     });
