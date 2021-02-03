@@ -1,15 +1,5 @@
 [
   {
-    "id": "926a85fd",
-    "email": "test@email.com",
-    "password": "1234"
-  },
-  {
-    "id": "c0690c92",
-    "email": "test2@email.com",
-    "password": "1234"
-  },
-  {
     "id": "172d51b8",
     "email": "test3@email.com",
     "password": "f11648a50b4b4e31447c03066038702fcba569b8e71107d053fa5879fa22577134f1ddf3c5144170be01f261663bbd86d1baf15bed9f2b071914e0eb1e529b01.1f8532778189f3f5"
