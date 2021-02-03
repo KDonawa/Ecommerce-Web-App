@@ -1,12 +1,5 @@
 const layout = require('../layout');
-
-function getError(errors, param) {
-    if(errors){
-        const error = errors.find(x => x['param'] === param);
-        if(error) return error.msg;
-    }
-    return '';
-}
+const {getValidationError} = require('../../helpers');
 
 module.exports = (errors) => {
     return layout({
@@ -14,9 +7,9 @@ module.exports = (errors) => {
         <div>
             <form method="POST">
                 <input name="email" placeholder="email">
-                ${getError(errors, 'email')}
+                ${getValidationError(errors, 'email')}
                 <input name="password" placeholder="password">
-                ${getError(errors, 'password')}
+                ${getValidationError(errors, 'password')}
                 <button>Sign In</button>
             </form>
         </div>

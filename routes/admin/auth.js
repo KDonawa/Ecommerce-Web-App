@@ -10,7 +10,7 @@ const { validateSignUpEmail, validateSignUpPassword, validateSignUpPasswordConfi
 const router = express.Router();
 
 router.get('/signup', (req, res) => {
-    res.send(signupTemplate({ req }));
+    res.send(signupTemplate(req));
 });
 
 router.post('/signup', [
@@ -22,7 +22,7 @@ router.post('/signup', [
         const result = validationResult(req);
 
         if (!result.isEmpty()) {
-            return res.send(signupTemplate({ req, errors: result.errors }));
+            return res.send(signupTemplate(req, result.errors ));
         }
 
         const { email, password } = req.body;
