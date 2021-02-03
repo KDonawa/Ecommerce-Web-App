@@ -32,7 +32,6 @@ app.post('/signup', async (req, res) => {
         return res.send('Passwords do not match');
     }
 
-    // Authentication
     const userId = await usersRepo.insert({email, password});
 
     req.session.userId = userId;
@@ -64,7 +63,8 @@ app.post('/signin', async (req, res) => {
     if(!user) {
         return res.send('Email is not registered');
     }
-    if(user.password !== password) {
+    const isValidPassword = await usersRepo.comparePasswords(user.password, password);
+    if(!isValidPassword) {
         return res.send('Invalid password');
     }
 

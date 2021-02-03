@@ -8,5 +8,15 @@
     "id": "c0690c92",
     "email": "test2@email.com",
     "password": "1234"
+  },
+  {
+    "id": "172d51b8",
+    "email": "test3@email.com",
+    "password": "f11648a50b4b4e31447c03066038702fcba569b8e71107d053fa5879fa22577134f1ddf3c5144170be01f261663bbd86d1baf15bed9f2b071914e0eb1e529b01.1f8532778189f3f5"
+  },
+  {
+    "id": "446f145b",
+    "email": "test4@email.com",
+    "password": "5120ef530c9d5c9beb85fabbc15031f65ad3a8226a5b42787998c0616e86610d69080d8e5db983556659b1b454996152d474dfbe9c74065385872a22e17e7c00.4eb1aef0c8924f4e"
   }
 ]
