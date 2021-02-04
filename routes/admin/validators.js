@@ -39,7 +39,9 @@ module.exports = {
             }
         }),
     validateNewProductTitle: check('title')
-        .trim().isLength({min:5, max:40}),
+        .trim().isLength({min:5, max:40})
+        .withMessage('Must be between 5 and 40 characters'),
     validateNewProductPrice: check('price')
-        .trim().toFloat().isFloat({min:1}),
+        .trim().toFloat().isFloat({min:1})
+        .withMessage('Price must be at least $1'),
 };
