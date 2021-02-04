@@ -1,4 +1,4 @@
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 const usersRepo = require('../../repos/users');
 
 module.exports = {
@@ -38,4 +38,8 @@ module.exports = {
                 }
             }
         }),
+    validateNewProductTitle: check('title')
+        .trim().isLength({min:5, max:40}),
+    validateNewProductPrice: check('price')
+        .trim().toFloat().isFloat({min:1}),
 };
