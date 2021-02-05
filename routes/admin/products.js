@@ -28,12 +28,10 @@ router.post('/admin/products/new', requireAuthentication, upload.single('image')
     ],
     handleValidationErrors(newProductTemplate),
     async (req, res) => {
-        const image = "";
         if(req.file){
-            image = req.file.buffer.toString('base64');
+            req.body.image = req.file.buffer.toString('base64');
         }
-        const { title, price } = req.body;
-        await productsRepo.insert({ title, price, image });
+        await productsRepo.insert(req.body);
         
         res.redirect('/admin/products');
     }
@@ -57,17 +55,15 @@ router.post('/admin/products/:id/edit', requireAuthentication, upload.single('im
         return await productsRepo.findById(req.params.id);
     }),
     async (req, res) => {
-        const image = "";
         if(req.file){
-            image = req.file.buffer.toString('base64');
+            req.body.image = req.file.buffer.toString('base64');
         }
-        const { title, price } = req.body;
         try {
-            await productsRepo.updateById(req.params.id, { title, price, image });
+            await productsRepo.updateById(req.params.id, req.body);
         } catch (error) {
             return res.send('Did not find product');
         }
-        
+
         res.redirect('/admin/products');
     }
 );
