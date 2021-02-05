@@ -12,5 +12,5 @@ app.use(authRouter);
 app.use(productsRouter);
 
 app.listen(3000, () => {
-    console.log('listening');
+    console.log('Server listening on http://localhost:3000 ...');
 });
