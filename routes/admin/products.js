@@ -18,21 +18,22 @@ router.get('/admin/products/new', (req, res) => {
     return res.send(newProductTemplate());
 });
 
-router.post('/admin/products/new',
+router.post('/admin/products/new', upload.single('image'),
     [
         validateNewProductTitle,
         validateNewProductPrice,
     ],
-    upload.single('image'),
-    (req, res) => {
+    async (req, res) => {
         const result = validationResult(req);
-        const {fieldname, originalname} = req.file;
-        console.log(fieldname, originalname);
+
         if (!result.isEmpty()) {
             //console.log(result.errors);
             return res.send(newProductTemplate(result.errors));
         }
 
+        const image = req.file.buffer.toString('base64');
+        const {title, price} = req.body;
+        await productsRepo.insert({title, price, image});
         res.send('product added');
     }
 );
