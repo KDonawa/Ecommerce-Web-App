@@ -1,13 +1,13 @@
 const layout = require('../layout');
 const {getValidationError} = require('../../helpers');
 
-module.exports = (req, errors) => {
+module.exports = (errors) => {
     return layout({
       content: `
         <div class="container">
           <div class="columns is-centered">
             <div class="column is-one-quarter">
-              <form method="POST">
+              <form action="#" method="POST">
                 <h1 class="title">Sign Up</h1>
                 <div class="field">
                   <label class="label">Email</label>
