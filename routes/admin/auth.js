@@ -26,7 +26,7 @@ router.post('/signup',
         const userId = await usersRepo.insert({ email, password });
 
         req.session.userId = userId;
-        res.send('Account Created');
+        res.redirect('/admin/products');
     });
 
 router.get('/signout', (req, res) => {
@@ -49,7 +49,7 @@ router.post('/signin',
         const user = await usersRepo.findOne({ email });
 
         req.session.userId = user.id;
-        res.send('Signed in');
+        res.redirect('/admin/products');
     });
 
 module.exports = router;
