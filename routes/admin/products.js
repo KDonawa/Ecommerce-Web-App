@@ -1,7 +1,7 @@
 const express = require('express');
 const { validationResult } = require('express-validator');
 const multer = require('multer');
-// const productsRepo = require('../../repos/products');
+const productsRepo = require('../../repos/products');
 const newProductTemplate = require('../../views/admin/products/new');
 const { validateNewProductTitle, validateNewProductPrice,
 
