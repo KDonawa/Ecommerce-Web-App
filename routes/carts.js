@@ -10,14 +10,23 @@ router.get('/cart', async (req, res) => {
 
 router.post('/cart/add/:id', async (req, res) => {
     let cart;
+    const id = req.params.id;
     if(!req.session.cartId){
         const cartId = await cartsRepo.insert({items:[]});
         req.session.cartId = cartId;
         cart = await cartsRepo.findById(cartId);
     } else {
-        cart = await cartsRepo.findById(req.session.cartId);
+        cart = await cartsRepo.findById(req.session.cartId);        
     }
-    console.log(cart);
+    const existingItem = cart.items.find(item => item.id === id);
+    if(existingItem){
+        existingItem.quantity++;
+    } else {
+        cart.items.push({id, quantity: 1});
+    }
+    
+    await cartsRepo.updateById(cart.id, {items: cart.items});
+
     res.send('Product added to cart');
 })
 
